@@ -25,8 +25,16 @@ const express = require('express');
 const app = express();
 
 app.get('/persons', (req, res) => {
-	console.log('route reached');
 	res.status(200).json(persons);
+});
+
+app.get('/info', (req, res) => {
+	const personCount = persons.length;
+	const time = new Date();
+	const info = `
+        <p>Phone has info for ${personCount} people</p>
+        <p>${time}</p>`;
+	res.status(200).send(info);
 });
 
 const PORT = 3001;
