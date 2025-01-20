@@ -23,6 +23,7 @@ let persons = [
 
 const express = require('express');
 const app = express();
+app.use(express.json());
 
 app.get('/persons', (req, res) => {
 	res.status(200).json(persons);
@@ -39,6 +40,21 @@ app.delete('/persons/:id', (req, res) => {
 	const id = req.params.id;
 	persons = persons.filter((p) => p.id !== id);
 	res.status(204).end();
+});
+app.post('/persons', (req, res) => {
+	const body = req.body;
+	if (!body.name || !body.number) {
+		return res.status(400).json({
+			error: 'request must include a name and number',
+		});
+	}
+	const person = {
+		name: body.name,
+		number: body.number,
+		id: Math.floor(Math.random() * 9000),
+	};
+	persons = persons.concat(person);
+	res.json(person);
 });
 
 app.get('/info', (req, res) => {
