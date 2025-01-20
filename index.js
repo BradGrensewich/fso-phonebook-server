@@ -27,6 +27,14 @@ const app = express();
 app.get('/persons', (req, res) => {
 	res.status(200).json(persons);
 });
+app.get('/persons/:id', (req, res) => {
+	const id = req.params.id;
+	const person = persons.find((p) => p.id === id);
+	if (!person) {
+		return res.status(404).end();
+	}
+	return res.status(200).json(person);
+});
 
 app.get('/info', (req, res) => {
 	const personCount = persons.length;
