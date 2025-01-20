@@ -42,12 +42,16 @@ app.delete('/persons/:id', (req, res) => {
 	res.status(204).end();
 });
 app.post('/persons', (req, res) => {
-	const body = req.body;
-	if (!body.name || !body.number) {
+	const body = req.body;    
+	if (!body.name|| !body.number) {
 		return res.status(400).json({
 			error: 'request must include a name and number',
 		});
-	}
+	} else if (persons.find(p => p.name === body.name)) {
+        return res.status(400).json({
+			error: 'person already exists in phonebook',
+		});
+    }
 	const person = {
 		name: body.name,
 		number: body.number,
