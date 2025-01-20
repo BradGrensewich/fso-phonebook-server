@@ -1,4 +1,4 @@
-const persons = [
+let persons = [
 	{
 		id: '1',
 		name: 'Arto Hellas',
@@ -34,6 +34,11 @@ app.get('/persons/:id', (req, res) => {
 		return res.status(404).end();
 	}
 	return res.status(200).json(person);
+});
+app.delete('/persons/:id', (req, res) => {
+	const id = req.params.id;
+	persons = persons.filter((p) => p.id !== id);
+	res.status(204).end();
 });
 
 app.get('/info', (req, res) => {
