@@ -27,6 +27,14 @@ const app = express();
 
 app.use(express.json());
 
+morgan.token('dataRecieved', (req, res) => {
+	if (req.body) {
+		return JSON.stringify(req.body);
+	} else {
+		return;
+	}
+});
+
 app.use(
 	morgan((tokens, req, res) => {
 		return [
@@ -37,6 +45,7 @@ app.use(
 			'-',
 			tokens['response-time'](req, res),
 			'ms',
+			tokens.dataRecieved(req, res),
 		].join(' ');
 	})
 );
