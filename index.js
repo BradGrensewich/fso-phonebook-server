@@ -22,8 +22,11 @@ let persons = [
 ];
 
 const express = require('express');
+const morgan = require('morgan')
 const app = express();
+app.use(morgan('tiny'))
 app.use(express.json());
+
 
 app.get('/persons', (req, res) => {
 	res.status(200).json(persons);
