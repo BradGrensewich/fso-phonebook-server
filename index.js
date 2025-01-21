@@ -22,12 +22,24 @@ let persons = [
 ];
 
 const express = require('express');
-const morgan = require('morgan')
+const morgan = require('morgan');
 const app = express();
-app.use(morgan('tiny'))
+
 app.use(express.json());
 
-
+app.use(
+	morgan((tokens, req, res) => {
+		return [
+			tokens.method(req, res),
+			tokens.url(req, res),
+			tokens.status(req, res),
+			tokens.res(req, res, 'content-length'),
+			'-',
+			tokens['response-time'](req, res),
+			'ms',
+		].join(' ');
+	})
+);
 app.get('/persons', (req, res) => {
 	res.status(200).json(persons);
 });
@@ -45,16 +57,16 @@ app.delete('/persons/:id', (req, res) => {
 	res.status(204).end();
 });
 app.post('/persons', (req, res) => {
-	const body = req.body;    
-	if (!body.name|| !body.number) {
+	const body = req.body;
+	if (!body.name || !body.number) {
 		return res.status(400).json({
 			error: 'request must include a name and number',
 		});
-	} else if (persons.find(p => p.name === body.name)) {
-        return res.status(400).json({
+	} else if (persons.find((p) => p.name === body.name)) {
+		return res.status(400).json({
 			error: 'person already exists in phonebook',
 		});
-    }
+	}
 	const person = {
 		name: body.name,
 		number: body.number,
