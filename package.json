@@ -1,22 +1,26 @@
 {
-  "name": "fso-phonebook-server",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
-  },
-  "author": "Brad Grensewich",
-  "license": "MIT",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.21.2",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "@flydotio/dockerfile": "^0.7.3",
-    "nodemon": "^3.1.9"
-  }
+	"name": "fso-phonebook-server",
+	"version": "0.0.1",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "node index.js",
+		"dev": "nodemon index.js",
+		"build:ui": "rm -rf dist && cd ../fullstackopen-exercises/2/phonebook && npm run build && cp -r dist ../../../fso-phonebook-server",
+		"deploy": "fly deploy",
+		"deploy:full": "npm run build:ui && npm run deploy",
+		"logs:prod": "fly logs"
+	},
+	"author": "Brad Grensewich",
+	"license": "MIT",
+	"dependencies": {
+		"cors": "^2.8.5",
+		"express": "^4.21.2",
+		"morgan": "^1.10.0"
+	},
+	"devDependencies": {
+		"@flydotio/dockerfile": "^0.7.3",
+		"nodemon": "^3.1.9"
+	}
 }
