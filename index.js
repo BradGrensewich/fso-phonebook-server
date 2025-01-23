@@ -51,10 +51,10 @@ app.use(
 		].join(' ');
 	})
 );
-app.get('/persons', (req, res) => {
+app.get('/api/persons', (req, res) => {
 	res.status(200).json(persons);
 });
-app.get('/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res) => {
 	const id = req.params.id;
 	const person = persons.find((p) => p.id === id);
 	if (!person) {
@@ -62,12 +62,12 @@ app.get('/persons/:id', (req, res) => {
 	}
 	return res.status(200).json(person);
 });
-app.delete('/persons/:id', (req, res) => {
+app.delete('/api/persons/:id', (req, res) => {
 	const id = req.params.id;
 	persons = persons.filter((p) => p.id !== id);
 	res.status(204).end();
 });
-app.post('/persons', (req, res) => {
+app.post('/api/persons', (req, res) => {
 	const body = req.body;
 	if (!body.name || !body.number) {
 		return res.status(400).json({
@@ -87,7 +87,7 @@ app.post('/persons', (req, res) => {
 	res.json(person);
 });
 
-app.get('/info', (req, res) => {
+app.get('/api/info', (req, res) => {
 	const personCount = persons.length;
 	const time = new Date();
 	const info = `
@@ -96,7 +96,7 @@ app.get('/info', (req, res) => {
 	res.status(200).send(info);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
 	console.log(`app running on port ${3001}`);
 });
