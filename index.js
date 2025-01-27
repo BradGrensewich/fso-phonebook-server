@@ -1,8 +1,8 @@
-require('dotenv').config()
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
-const Person = require('./models/person')
+const Person = require('./models/person');
 const app = express();
 
 app.use(express.static('dist'));
@@ -33,8 +33,8 @@ app.use(
 );
 app.get('/api/persons', (req, res) => {
 	Person.find({}).then((persons) => {
-		return res.status(200).json(persons)
-	})
+		return res.status(200).json(persons);
+	});
 });
 app.get('/api/persons/:id', (req, res) => {
 	const id = req.params.id;
@@ -45,9 +45,9 @@ app.get('/api/persons/:id', (req, res) => {
 	return res.status(200).json(person);
 });
 app.delete('/api/persons/:id', (req, res) => {
-	const id = req.params.id;	
-	persons = persons.filter((p) => p.id !== id);	
-	res.status(204).end()
+	const id = req.params.id;
+	persons = persons.filter((p) => p.id !== id);
+	res.status(204).end();
 });
 app.post('/api/persons', (req, res) => {
 	const body = req.body;
@@ -55,18 +55,14 @@ app.post('/api/persons', (req, res) => {
 		return res.status(400).json({
 			error: 'request must include a name and number',
 		});
-	} else if (persons.find((p) => p.name === body.name)) {
-		return res.status(400).json({
-			error: 'person already exists in phonebook',
-		});
 	}
-	const person = {
+	const person = new Person({
 		name: body.name,
 		number: body.number,
-		id: Math.floor(Math.random() * 9000),
-	};
-	persons = persons.concat(person);
-	res.json(person);
+	});
+	person.save(person).then((result) => {
+		res.status(201).json(result);
+	});
 });
 
 app.get('/api/info', (req, res) => {
