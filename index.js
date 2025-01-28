@@ -73,6 +73,25 @@ app.post('/api/persons', (req, res, next) => {
 		.catch((error) => next(error));
 });
 
+app.put('/api/persons/:id', (req, res, next) => {
+	const id = req.params.id;
+	const body = req.body;
+	if (!body.name || !body.number) {
+		return res.status(400).json({
+			error: 'request must include a name and number',
+		});
+	}
+	const updatedPerson = {
+		name: body.name,
+		number: body.number,
+	};
+	Person.findByIdAndUpdate(id, updatedPerson, { new: true })
+		.then((result) => {
+			res.status(200).json(result);
+		})
+		.catch((error) => next(error));
+});
+
 app.get('/api/info', (req, res) => {
 	const personCount = persons.length;
 	const time = new Date();
@@ -90,7 +109,7 @@ const errorHandler = (error, req, res, next) => {
 	next(error);
 };
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
